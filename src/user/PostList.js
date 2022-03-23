@@ -3,6 +3,7 @@ import React from "react";
 import Post from "./Post";
 import PostLink from "./PostLink";
 import NoPostSelectedMessage from "./NoPostSelectedMessage";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 
 /*
   TODO: Update the below so that the components show on the appropriate route.
@@ -18,6 +19,7 @@ export const PostList = ({ posts }) => {
   const postLinks = posts.map((post) => (
     <PostLink key={post.id} userId={post.userId} post={post} />
   ));
+  const { path, url } = useRouteMatch();
 
   return (
     <div className="row pt-2">
@@ -25,8 +27,14 @@ export const PostList = ({ posts }) => {
         <ul className="list-group">{postLinks}</ul>
       </div>
       <div className="col-9">
-        <NoPostSelectedMessage />
-        <Post posts={posts} />
+        <Switch>
+          <Route exact path={url}>
+            <NoPostSelectedMessage />
+          </Route>
+          <Route path={`${url}/:postId`}>
+            <Post posts={posts} />
+          </Route>
+        </Switch>
       </div>
     </div>
   );
